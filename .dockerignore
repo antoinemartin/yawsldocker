@@ -1,0 +1,4 @@
+.pre-commit-config.yaml
+.prettierrc
+cspell.json
+RELEASE.md

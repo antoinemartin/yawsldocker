@@ -1,0 +1,33 @@
+{
+    "version": "0.2",
+    "language": "en",
+    "words": [
+        "alpine",
+        "yawsldocker"
+    ],
+    "dictionaries": [
+        "typescript",
+        "node",
+        "software-terms",
+        "companies"
+    ],
+    "ignorePaths": [
+        "node_modules",
+        "dist",
+        "build",
+        ".git",
+        "*.min.js",
+        "*.map",
+        "package-lock.json",
+        "yarn.lock",
+        ".vscode",
+        ".idea"
+    ],
+    "ignoreRegExpList": [
+        "\\b[A-Z]{2,}\\b",
+        "\\b[a-z]+[A-Z][a-z]*\\b",
+        "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    ],
+    "allowCompoundWords": true,
+    "caseSensitive": false
+}
