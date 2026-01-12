@@ -1,13 +1,17 @@
 # YawslDocker 🐳
 
-**Yet Another WSL Docker** - A lightweight, Docker-enabled WSL distribution based on Alpine Linux.
+**Yet Another WSL Docker** - A lightweight, Docker-enabled WSL distribution
+based on Alpine Linux.
 
 [![Build and Push yawsldocker](https://github.com/antoinemartin/yawsldocker/actions/workflows/yawsldocker.yml/badge.svg)](https://github.com/antoinemartin/yawsldocker/actions/workflows/yawsldocker.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 🚀 Overview
 
-YawslDocker is a custom WSL distribution designed to provide a seamless Docker development experience on Windows. Built on Alpine Linux 3.22, it comes pre-configured with Docker, BuildKit, and a beautiful Zsh environment powered by Oh My Zsh and Powerlevel10k.
+YawslDocker is a custom WSL distribution designed to provide a seamless Docker
+development experience on Windows. Built on Alpine Linux 3.22, it comes
+pre-configured with Docker, BuildKit, and a beautiful Zsh environment powered by
+Oh My Zsh and Powerlevel10k.
 
 ### ✨ Features
 
@@ -30,6 +34,36 @@ YawslDocker is a custom WSL distribution designed to provide a seamless Docker d
 
 ### Installation
 
+#### Automated Installation (Recommended)
+
+The easiest way to install YawslDocker is using the PowerShell installation
+script:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://raw.githubusercontent.com/antoinemartin/yawsldocker/refs/heads/main/Get-YawslDocker.ps1 | Invoke-Expression
+```
+
+The script accepts optional parameters:
+
+```powershell
+# Custom installation
+Invoke-RestMethod -Uri https://raw.githubusercontent.com/antoinemartin/yawsldocker/refs/heads/main/Get-YawslDocker.ps1 | Invoke-Expression -ArgumentList @{
+    Version = 'latest'
+    Name = 'yawsldocker'
+    InstallDir = "$env:LOCALAPPDATA\yawsldocker"
+}
+```
+
+You can also set environment variables instead:
+
+- `$env:YAWSLDOCKER_VERSION` - Image version (default: `latest`)
+- `$env:YAWSLDOCKER_NAME` - Distribution name (default: `yawsldocker`)
+- `$env:YAWSLDOCKER_DIR` - Installation directory (default:
+  `$env:LOCALAPPDATA\yawsldocker`)
+
+#### Manual Installation (Alternative)
+
 1. **Download the latest release:**
 
    ```powershell
@@ -43,20 +77,28 @@ YawslDocker is a custom WSL distribution designed to provide a seamless Docker d
    wsl --import yawsldocker C:\WSL\yawsldocker yawsldocker.rootfs.tar.gz
    ```
 
-3. **Start the Docker daemon:**
+3. **Clean up:**
+   ```powershell
+   Remove-Item yawsldocker.rootfs.tar.gz
+   ```
+
+### Starting YawslDocker
+
+1. **Start the Docker daemon:**
 
    ```powershell
    wsl -d yawsldocker --user root openrc default
    ```
 
-4. **Access your new environment:**
+2. **Access your new environment:**
    ```powershell
    wsl -d yawsldocker
    ```
 
 ### Using Docker from Windows Host
 
-If you want to use the Docker CLI from Windows to access the Docker daemon running in WSL:
+If you want to use the Docker CLI from Windows to access the Docker daemon
+running in WSL:
 
 1. **Install Docker CLI** (using Scoop):
 
@@ -67,7 +109,7 @@ If you want to use the Docker CLI from Windows to access the Docker daemon runni
 2. **Set the Docker host environment variable:**
 
    ```powershell
-   $env:DOCKER_HOST="tcp://localhost:2376"
+   $env:DOCKER_HOST="tcp://localhost:2375"
    ```
 
 3. **Test the connection:**
@@ -75,6 +117,32 @@ If you want to use the Docker CLI from Windows to access the Docker daemon runni
    docker ps
    docker run --rm -it alpine:latest
    ```
+
+### Working with Bind Mounts
+
+When using bind mounts from Windows, the source path must be specified in Unix
+format with `/mnt/c/...` notation:
+
+```powershell
+# Convert Windows path to WSL path
+$unixPath = wsl -d yawsldocker wslpath "$env:APPDATA".Replace('\','\\')
+
+# Use in docker command
+docker run -v "${unixPath}:/data" alpine:latest
+```
+
+**Tip**: Create a PowerShell function for easy path conversion:
+
+```powershell
+function ConvertTo-WslPath {
+    param([string]$Path)
+    wsl -d yawsldocker wslpath ($Path -replace '\\','\\\\')
+}
+
+# Usage
+$wslPath = ConvertTo-WslPath "C:\Users\MyUser\Documents"
+docker run -v "${wslPath}:/workspace" alpine:latest
+```
 
 ## 🏗️ What's Included
 
@@ -109,7 +177,7 @@ If you want to use the Docker CLI from Windows to access the Docker daemon runni
 
 The Docker daemon is configured to:
 
-- Listen on TCP port 2376 (accessible from Windows)
+- Listen on TCP port 2375 (accessible from Windows)
 - Listen on Unix socket (for internal use)
 - Run on system startup via OpenRC
 
@@ -211,10 +279,10 @@ sudo rc-service docker status
 
 ```bash
 # Verify Docker is listening
-sudo netstat -tlnp | grep 2376
+sudo netstat -tlnp | grep 2375
 
 # Test connection
-telnet localhost 2376
+telnet localhost 2375
 ```
 
 ### Permission Issues
@@ -236,7 +304,8 @@ wsl --terminate yawsldocker
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+Contributions are welcome! Please feel free to submit a Pull Request. For major
+changes, please open an issue first to discuss what you would like to change.
 
 ### Development Setup
 
@@ -248,7 +317,8 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
+for details.
 
 ## 🙏 Acknowledgments
 
@@ -259,9 +329,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/antoinemartin/yawsldocker/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/antoinemartin/yawsldocker/discussions)
-- 📧 **Email**: [Issues only](https://github.com/antoinemartin/yawsldocker/issues/new)
+- 🐛 **Issues**:
+  [GitHub Issues](https://github.com/antoinemartin/yawsldocker/issues)
+- 💬 **Discussions**:
+  [GitHub Discussions](https://github.com/antoinemartin/yawsldocker/discussions)
+- 📧 **Email**:
+  [Issues only](https://github.com/antoinemartin/yawsldocker/issues/new)
 
 ---
 

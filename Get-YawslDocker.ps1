@@ -322,7 +322,7 @@ function Install-YawslDocker {
 
         Write-InstallInfo "yawsldocker installed successfully!" -ForegroundColor Green
         Write-InstallInfo "Start docker in the distribution with: wsl -d $WSL_NAME -u root openrc default"
-        Write-InstallInfo "Change `$env:DOCKER_HOST=`"tcp://localhost:2375`" to use Docker from Windows."
+        Write-InstallInfo "Change `$env:DOCKER_HOST=`"tcp://localhost`" to use Docker from Windows."
         Write-InstallInfo "Stop docker with: wsl -d $WSL_NAME -u root openrc sysinit"
         Write-InstallInfo "Uninstall the distribution with: wsl --unregister $WSL_NAME"
     } finally {
