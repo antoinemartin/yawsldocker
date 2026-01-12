@@ -2,3 +2,4 @@
 .prettierrc
 cspell.json
 RELEASE.md
+hack/*
