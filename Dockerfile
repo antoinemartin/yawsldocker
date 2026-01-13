@@ -9,7 +9,7 @@ ARG GROUPNAME=alpine
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community/" >> /etc/apk/repositories && \
     echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing/" >> /etc/apk/repositories && \
     apk update --quiet && \
-    apk add --no-progress --no-cache zsh tzdata git libstdc++ doas iproute2 gnupg socat openssh openrc docker docker-compose buildkit && \
+    apk add --no-progress --no-cache zsh tzdata git libstdc++ doas iproute2 gnupg socat openssh openrc docker docker-compose buildkit rsync && \
     rm -rf `find /var/cache/apk/ -type f`
 
 # Configuration

@@ -9,13 +9,13 @@ based on Alpine Linux.
 ## 🚀 Overview
 
 YawslDocker is a custom WSL distribution designed to provide a seamless Docker
-development experience on Windows. Built on Alpine Linux 3.22, it comes
+development experience on Windows. Built on Alpine Linux, it comes
 pre-configured with Docker, BuildKit, and a beautiful Zsh environment powered by
 Oh My Zsh and Powerlevel10k.
 
 ### ✨ Features
 
-- 🐧 **Alpine Linux 3.22** - Lightweight and secure base
+- 🐧 **Alpine Linux 3.23** - Lightweight and secure base
 - 🐳 **Docker & Docker Compose** - Ready-to-use container runtime
 - 🏗️ **BuildKit** - Advanced Docker build features
 - 🎨 **Oh My Zsh + Powerlevel10k** - Beautiful and functional shell
@@ -44,23 +44,21 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Invoke-RestMethod -Uri https://raw.githubusercontent.com/antoinemartin/yawsldocker/refs/heads/main/Get-YawslDocker.ps1 | Invoke-Expression
 ```
 
-The script accepts optional parameters:
-
-```powershell
-# Custom installation
-Invoke-RestMethod -Uri https://raw.githubusercontent.com/antoinemartin/yawsldocker/refs/heads/main/Get-YawslDocker.ps1 | Invoke-Expression -ArgumentList @{
-    Version = 'latest'
-    Name = 'yawsldocker'
-    InstallDir = "$env:LOCALAPPDATA\yawsldocker"
-}
-```
-
-You can also set environment variables instead:
+You can set environment variables instead:
 
 - `$env:YAWSLDOCKER_VERSION` - Image version (default: `latest`)
 - `$env:YAWSLDOCKER_NAME` - Distribution name (default: `yawsldocker`)
 - `$env:YAWSLDOCKER_DIR` - Installation directory (default:
   `$env:LOCALAPPDATA\yawsldocker`)
+
+Example:
+
+```powershell
+$env:YAWSLDOCKER_VERSION = "v1.0.0"
+$env:YAWSLDOCKER_NAME = "mydocker"
+$env:YAWSLDOCKER_DIR = "C:\WSL\mydocker"
+Invoke-RestMethod -Uri https://raw.githubusercontent.com/antoinemartin/yawsldocker/refs/heads/main/Get-YawslDocker.ps1 | Invoke-Expression
+```
 
 #### Manual Installation (Alternative)
 
@@ -109,7 +107,7 @@ running in WSL:
 2. **Set the Docker host environment variable:**
 
    ```powershell
-   $env:DOCKER_HOST="tcp://localhost:2375"
+   $env:DOCKER_HOST="tcp://localhost"
    ```
 
 3. **Test the connection:**
@@ -144,11 +142,78 @@ $wslPath = ConvertTo-WslPath "C:\Users\MyUser\Documents"
 docker run -v "${wslPath}:/workspace" alpine:latest
 ```
 
+### Updating YawslDocker
+
+To update YawslDocker while preserving your Docker images and containers, ensure
+that docker is not running and follow these steps:
+
+#### 1. Download and Import New Version
+
+```powershell
+$env:YAWSLDOCKER_NAME = "newdocker"
+Invoke-RestMethod -Uri https://raw.githubusercontent.com/antoinemartin/yawsldocker/refs/heads/main/Get-YawslDocker.ps1 | Invoke-Expression
+```
+
+#### 2. Mount Old Docker Data
+
+```powershell
+wsl -d yawsldocker --user root sh -c 'mkdir -p /mnt/wsl/olddocker && mount --bind /var/lib/docker /mnt/wsl/olddocker'
+```
+
+#### 3. Synchronize Docker Data
+
+```powershell
+# Options: a: archive, q: quiet, H: preserve hard links, A: preserve ACLs, X: preserve extended attributes, S: sparse files, numeric-ids: preserve UIDs/GIDs
+wsl -d newdocker --user root sh -c 'rsync -aqHAXS --numeric-ids /mnt/wsl/olddocker/ /var/lib/docker'
+```
+
+#### 4. Delete Old Distribution and Rename
+
+```powershell
+# Unmount old docker data
+wsl -d yawsldocker --user root umount /mnt/wsl/olddocker
+
+# Terminate both distributions
+wsl --terminate yawsldocker
+wsl --terminate newdocker
+
+# Unregister the old distribution
+wsl --unregister yawsldocker
+
+# Rename newdocker to yawsldocker via registry
+$registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss"
+$distros = Get-ChildItem -Path $registryPath
+
+foreach ($distro in $distros) {
+    $distroName = (Get-ItemProperty -Path $distro.PSPath).DistributionName
+    if ($distroName -eq "newdocker") {
+        Set-ItemProperty -Path $distro.PSPath -Name "DistributionName" -Value "yawsldocker"
+        Write-Host "Successfully renamed newdocker to yawsldocker"
+        break
+    }
+}
+```
+
+#### 5. Verify the Update
+
+```powershell
+# List distributions
+wsl -l -v
+
+# Start the updated distribution
+wsl -d yawsldocker --user root openrc default
+
+# Verify Docker images and containers are preserved
+wsl -d yawsldocker
+docker images
+docker ps -a
+```
+
 ## 🏗️ What's Included
 
 ### Software Stack
 
-- **Base OS**: Alpine Linux 3.22
+- **Base OS**: Alpine Linux 3.23
 - **Container Runtime**: Docker with Docker Compose
 - **Build System**: BuildKit
 - **Shell**: Zsh with Oh My Zsh

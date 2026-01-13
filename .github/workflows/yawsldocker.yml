@@ -103,7 +103,6 @@ jobs:
           draft: true
           generate_release_notes: true
           body_path: RELEASE.md
-          # TODO: Add a powershell script that installs the distribution and add the aliases allowing management and path translations
           files: |
             yawsldocker.rootfs.tar.gz
         env:

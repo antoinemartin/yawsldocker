@@ -71,8 +71,8 @@ PS> docker run --rm -it alpine:latest
 / # cat /etc/os-release
 NAME="Alpine Linux"
 ID=alpine
-VERSION_ID=3.22.1
-PRETTY_NAME="Alpine Linux v3.22"
+VERSION_ID=3.23.2
+PRETTY_NAME="Alpine Linux v3.23"
 HOME_URL="https://alpinelinux.org/"
 BUG_REPORT_URL="https://gitlab.alpinelinux.org/alpine/aports/-/issues"
 / # exit
