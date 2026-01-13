@@ -89,6 +89,8 @@ jobs:
       - name: Compress the tar file
         run: |
           gzip -9 yawsldocker.rootfs.tar
+          sha256sum yawsldocker.rootfs.tar.gz > SHA256SUMS.txt
+          sha256sum Get-YawslDocker.ps1 >> SHA256SUMS.txt
 
       - name: Upload the compressed tar file
         uses: actions/upload-artifact@v4
@@ -105,5 +107,7 @@ jobs:
           body_path: RELEASE.md
           files: |
             yawsldocker.rootfs.tar.gz
+            Get-YawslDocker.ps1
+            SHA256SUMS.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

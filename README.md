@@ -6,6 +6,28 @@ based on Alpine Linux.
 [![Build and Push yawsldocker](https://github.com/antoinemartin/yawsldocker/actions/workflows/yawsldocker.yml/badge.svg)](https://github.com/antoinemartin/yawsldocker/actions/workflows/yawsldocker.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## 📑 Table of Contents
+
+- [🚀 Overview](#-overview)
+  - [✨ Features](#-features)
+- [📦 Quick Start](#-quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Starting YawslDocker](#starting-yawsldocker)
+  - [Using Docker from Windows Host](#using-docker-from-windows-host)
+  - [Working with Bind Mounts](#working-with-bind-mounts)
+  - [Updating YawslDocker](#updating-yawsldocker)
+- [🏗️ What's Included](#️-whats-included)
+- [🔧 Configuration](#-configuration)
+- [🛠️ Development](#️-development)
+- [🚦 Usage Examples](#-usage-examples)
+- [🔍 Troubleshooting](#-troubleshooting)
+- [📋 System Requirements](#-system-requirements)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [🙏 Acknowledgments](#-acknowledgments)
+- [📞 Support](#-support)
+
 ## 🚀 Overview
 
 YawslDocker is a custom WSL distribution designed to provide a seamless Docker
@@ -41,7 +63,7 @@ script:
 
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-Invoke-RestMethod -Uri https://raw.githubusercontent.com/antoinemartin/yawsldocker/refs/heads/main/Get-YawslDocker.ps1 | Invoke-Expression
+Invoke-RestMethod -Uri https://github.com/antoinemartin/yawsldocker/releases/latest/download/Get-YawslDocker.ps1 | Invoke-Expression
 ```
 
 You can set environment variables instead:
@@ -57,7 +79,7 @@ Example:
 $env:YAWSLDOCKER_VERSION = "v1.0.0"
 $env:YAWSLDOCKER_NAME = "mydocker"
 $env:YAWSLDOCKER_DIR = "C:\WSL\mydocker"
-Invoke-RestMethod -Uri https://raw.githubusercontent.com/antoinemartin/yawsldocker/refs/heads/main/Get-YawslDocker.ps1 | Invoke-Expression
+Invoke-RestMethod -Uri https://github.com/antoinemartin/yawsldocker/releases/latest/download/Get-YawslDocker.ps1 | Invoke-Expression
 ```
 
 #### Manual Installation (Alternative)

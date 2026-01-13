@@ -6,7 +6,7 @@ Install YawslDocker using the PowerShell installation script:
 
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-Invoke-RestMethod -Uri https://raw.githubusercontent.com/antoinemartin/yawsldocker/refs/heads/main/Get-YawslDocker.ps1 | Invoke-Expression
+Invoke-RestMethod -Uri https://github.com/antoinemartin/yawsldocker/releases/latest/download/Get-YawslDocker.ps1 | Invoke-Expression
 ```
 
 The script will automatically:
@@ -24,7 +24,7 @@ $env:YAWSLDOCKER_NAME = 'yawsldocker'
 $env:YAWSLDOCKER_DIR = "$env:LOCALAPPDATA\yawsldocker"
 
 # Then run the installer
-Invoke-RestMethod -Uri https://raw.githubusercontent.com/antoinemartin/yawsldocker/refs/heads/main/Get-YawslDocker.ps1 | Invoke-Expression
+Invoke-RestMethod -Uri https://github.com/antoinemartin/yawsldocker/releases/latest/download/Get-YawslDocker.ps1 | Invoke-Expression
 ```
 
 ### Manual Installation (Alternative)
