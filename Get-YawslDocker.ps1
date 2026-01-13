@@ -353,7 +353,7 @@ function Write-DebugInfo {
 # Prepare variables with environment variable fallback
 $IMAGE_VERSION = $Version, $env:YAWSLDOCKER_VERSION, 'latest' | Where-Object { -not [String]::IsNullOrEmpty($_) } | Select-Object -First 1
 $WSL_NAME = $Name, $env:YAWSLDOCKER_NAME, 'yawsldocker' | Where-Object { -not [String]::IsNullOrEmpty($_) } | Select-Object -First 1
-$INSTALL_DIR = $InstallDir, $env:YAWSLDOCKER_DIR, "$env:LOCALAPPDATA\yawsldocker" | Where-Object { -not [String]::IsNullOrEmpty($_) } | Select-Object -First 1
+$INSTALL_DIR = $InstallDir, $env:YAWSLDOCKER_DIR, "$env:LOCALAPPDATA\$WSL_NAME" | Where-Object { -not [String]::IsNullOrEmpty($_) } | Select-Object -First 1
 
 # Quit if anything goes wrong
 $oldErrorActionPreference = $ErrorActionPreference
